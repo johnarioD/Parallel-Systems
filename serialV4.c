@@ -11,7 +11,7 @@ void triangleFind(int rows[], int cols[], int nz, int N, int threadNo){
 
   clock_gettime(CLOCK_MONOTONIC, &ts_start);
 
-  printf("\nGetting into serial V4\n");
+  //printf("\nGetting into serial V4\n");
 
   for(int i = 0; i < N; i++){
     for(int j = rows[i]; j < rows[i+1]; j++){
@@ -35,10 +35,10 @@ void triangleFind(int rows[], int cols[], int nz, int N, int threadNo){
 
   clock_gettime(CLOCK_MONOTONIC, &ts_end);
   int counter = 0;
-  for(int i = 0; i < N; i++){
+  /*for(int i = 0; i < N; i++){
     counter+=triangles[i];
   }
-  printf("\n%d triangles found with serial V4\n",counter/3);
-  printf("\nSerial V4 time: %ld.%ld sec\n", (ts_end.tv_sec - ts_start.tv_sec), (abs(ts_end.tv_nsec = ts_start.tv_nsec)));
+  printf("\n%d triangles found with serial V4\n",counter/3);*/
+  printf("%ld.%ld\n", (ts_end.tv_sec - ts_start.tv_sec), (abs(ts_end.tv_nsec = ts_start.tv_nsec)));
   free(triangles);
 }

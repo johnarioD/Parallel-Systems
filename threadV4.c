@@ -11,17 +11,23 @@ struct data{
 mutex mtx;
 
 void *ParallelCode(void * unused){
-  int i;
-  while(!s.empty()){
+  int i, index1, index2;
+  while(true){
 
     mtx.lock();
-    i = s.top();
-    s.pop();
-    mtx.unlock();
+
+    if(s.empty()){
+      mtx.unlock();
+      break;
+    } else {
+      i = s.top();
+      s.pop();
+      mtx.unlock();
+    }
 
     for(int j = arg.rows[i]; j < arg.rows[i+1]; j++){
-      int index1 = arg.rows[i];
-      int index2 = arg.rows[arg.cols[j]];
+      index1 = arg.rows[i];
+      index2 = arg.rows[arg.cols[j]];
       while((index1 < arg.rows[i+1])
           &&(index2 < arg.rows[arg.cols[j]+1]))
           {
@@ -45,9 +51,9 @@ void triangleFind(int rows[], int cols[], int nz, int N, int threadNo){
   struct timespec ts_start;
   struct timespec ts_end;
 
-  int *triangles = (int *)malloc(N * sizeof(N));
+  arg.triangles = (int *)malloc(N * sizeof(int));
   for(int i = 0; i < N; i++){
-    triangles[i]=0;
+    arg.triangles[i]=0;
   }
   pthread_t threads[threadNo];
 
@@ -56,27 +62,25 @@ void triangleFind(int rows[], int cols[], int nz, int N, int threadNo){
   }
   arg.rows = rows;
   arg.cols = cols;
-  arg.triangles = triangles;
-
   clock_gettime(CLOCK_MONOTONIC, &ts_start);
 
-  printf("\nGetting into thread V4\n");
-
+  //printf("\nGetting into thread V4\n");
   for(int t = 0; t < threadNo; t++){
-    pthread_create(&threads[t], NULL, ParallelCode, NULL);
+    if(pthread_create(&threads[t], NULL, ParallelCode, NULL)!=0){
+      printf("Thread create fail");
+      break;
+    }
   }
 
   for(int t = 0; t < threadNo; t++){
     pthread_join(threads[t],NULL);
   }
 
-
   clock_gettime(CLOCK_MONOTONIC, &ts_end);
-  int counter = 0;
-  for(int i = 0; i < N; i++){
+  //int counter = 0;
+  /*for(int i = 0; i < N; i++){
     counter+=arg.triangles[i];
   }
-  printf("\n%d triangles found with thread V4\n",counter/3);
-  printf("\nThread V4 time: %ld.%ld sec\n", (ts_end.tv_sec - ts_start.tv_sec), (abs(ts_end.tv_nsec = ts_start.tv_nsec)));
-  free(triangles);
+  printf("\n%d triangles found with thread V4\n",counter/3);*/
+  printf("%ld.%ld\n", (ts_end.tv_sec - ts_start.tv_sec), (abs(ts_end.tv_nsec = ts_start.tv_nsec)));
 }

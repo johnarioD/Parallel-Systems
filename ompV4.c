@@ -15,7 +15,7 @@ void triangleFind(int rows[], int cols[], int nz, int N, int threadNo){
 
   clock_gettime(CLOCK_MONOTONIC, &ts_start);
 
-  printf("\nGetting into OpenMP V4\n");
+  //printf("\nGetting into OpenMP V4\n");
 
 
   #pragma omp parallel for private(i)
@@ -40,10 +40,10 @@ void triangleFind(int rows[], int cols[], int nz, int N, int threadNo){
 
   clock_gettime(CLOCK_MONOTONIC, &ts_end);
   int counter = 0;
-  for(i = 0; i < N; i++){
+  /*for(i = 0; i < N; i++){
     counter+=triangles[i];
   }
-  printf("\n%d triangles found with OpenMP V4\n",counter/3);
-  printf("\nOpenMP V4 time: %ld.%ld sec\n", (ts_end.tv_sec - ts_start.tv_sec), (abs(ts_end.tv_nsec = ts_start.tv_nsec)));
+  printf("\n%d triangles found with OpenMP V4\n",counter/3);*/
+  printf("%ld.%ld\n", (ts_end.tv_sec - ts_start.tv_sec), (abs(ts_end.tv_nsec = ts_start.tv_nsec)));
   free(triangles);
 }

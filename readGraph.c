@@ -76,8 +76,8 @@ int main(int argc, char *argv[])
   }
 
   //mm_write_banner(stdout, matcode);
-  printf("\n");
-  mm_write_mtx_crd_size(stdout, M, N, nz);
+  //printf("\n");
+  //mm_write_mtx_crd_size(stdout, M, N, nz);
 
   std::vector<std::vector<int>> vec(N);
   int *cols = (int *) malloc(2 * nz * sizeof(int));
